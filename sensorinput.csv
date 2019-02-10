@@ -1,0 +1,2 @@
+patientId,pulse,pulseRangeLower,pulseRangeUpper,bloodPressure,pressureRangeLower,pressureRangeLower,bloodOx,oxRangeLower,oxRangeUpper,time
+1234,90,50,120,80,30,100,83,60,90,12:05:20pm-18/01/2019
