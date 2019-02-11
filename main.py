@@ -22,16 +22,33 @@ def main():
 	# insert
 	db.insert_mongo(patient_json, sensor_json)
 
+	# alert
+	alert_json = alert_system.alertCheck(sensor_json)
+
+	# output
+	patient = output_api.patient()
+	patient.recieveFromAlert(alert_json)
+	patient.send_alert_to_UI(db.read_mongo_patient("1234"))
+
+	'''
+	database function test
+
+	'''
+	print("=======================")
+	print("database function test")
+	print("=======================")
 	# read
-	print('==========================')
-	print('read from datebase')
-	print('==========================')
+	print("--------------------")
+	print("search by id")
+	print("--------------------")
 	print(db.read_mongo_patient("1234"))
+	print("--------------------")
+	print('serch by id and datetime')
+	print("--------------------")
 	print(db.read_mongo_time("1234", '12:05:20pm-18/01/2019'))
 
 	# update
 	db.update_mongo("1234", '12:05:20pm-18/01/2019', 'age', '25')
-	print(db.read_mongo_patient("1234"))
 	print('===============================================================')
 	print('read from database after update (change the age from 30 to 25)')
 	print('==============================================================')
@@ -44,18 +61,6 @@ def main():
 	print('read from database after delete')
 	print('================================')
 	print(db.read_mongo_patient("1234"))
-
-	# alert
-	alert_json = alert_system.alertCheck(sensor_json)
-
-	# output
-	print('==========================')
-	print('alert information output')
-	print('==========================')
-	patient = output_api.patient()
-	patient.recieveFromAlert(json.loads(alert_json))
-	patient.send_alert_to_UI()
-	
 
 
 if __name__ == '__main__':
