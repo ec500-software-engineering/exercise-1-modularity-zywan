@@ -1,3 +1,6 @@
+'''
+Copied from https://github.com/alexlin0625/EC500_Spring19/blob/input_module/input.py
+'''
 import csv
 import json
 
