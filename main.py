@@ -1,66 +1,75 @@
 """
-Created on 02/10/2019
+Created on 02/11/2019
 @author: Zhangyu Wan
 """
 
 import csv
 import json
-import input_api
+import input_generator
 import storage_mongo
 import output_api
 import alert_system
+import threading
+import time
+from queue import Queue
+
+def input_generate(q):
+	while True:
+		time.sleep(3)
+		print('generate random input data')
+		# get info from input generator
+		patient_json, sensor_json = input_generator.generate()
+		# connect to database
+		db = storage_mongo.storage()
+		db.connectMongob()
+		# insert
+		db.insert_mongo(patient_json, sensor_json)
+		# create a event
+		evt = threading.Event()
+		# push the event into queue
+		q.put((sensor_json, evt))
+		print("wait for the data to be process")
+		# wait
+		evt.wait()
+
+def alert(q,q1):
+	while True:
+		time.sleep(1)
+		sensor_json, evt = q.get()
+		# alert
+		print("process the data to get the alert json")
+		alert_json = alert_system.alertCheck(sensor_json)
+		evt.set()
+		q.task_done()
+
+		evt = threading.Event()
+		q1.put((alert_json,evt))
+		print("wait for output")
+		evt.wait()
+
+
+def output(q,q1):
+	while True:
+		alert_json, evt = q1.get()
+		db = storage_mongo.storage()
+		db.connectMongob()
+		patient = output_api.patient()
+		patient.recieveFromAlert(alert_json)
+		patient.send_alert_to_UI(db.read_mongo_patient("001"))
+		evt.set()
+		q1.task_done()
 
 def main():
-	# get info from input module
-	patient_json = input_api.getPatientInfo()
-	sensor_json = input_api.readSensorData()
-
-	# connect to database
-	db = storage_mongo.storage()
-	db.connectMongob()
-
-	# insert
-	db.insert_mongo(patient_json, sensor_json)
-
-	# alert
-	alert_json = alert_system.alertCheck(sensor_json)
-
-	# output
-	patient = output_api.patient()
-	patient.recieveFromAlert(alert_json)
-	patient.send_alert_to_UI(db.read_mongo_patient("1234"))
-
-	'''
-	database function test
-
-	'''
-	print("=======================")
-	print("database function test")
-	print("=======================")
-	# read
-	print("--------------------")
-	print("search by id")
-	print("--------------------")
-	print(db.read_mongo_patient("1234"))
-	print("--------------------")
-	print('serch by id and datetime')
-	print("--------------------")
-	print(db.read_mongo_time("1234", '12:05:20pm-18/01/2019'))
-
-	# update
-	db.update_mongo("1234", '12:05:20pm-18/01/2019', 'age', '25')
-	print('===============================================================')
-	print('read from database after update (change the age from 30 to 25)')
-	print('==============================================================')
-	print(db.read_mongo_patient("1234"))
-
-	# delete 
-	db.delete_mongo_patient("1234")
-	db.delete_mongo_time("1234",'12:05:20pm-18/01/2019')
-	print('================================')
-	print('read from database after delete')
-	print('================================')
-	print(db.read_mongo_patient("1234"))
+	q = Queue()
+	q1 = Queue()
+	thread_input = threading.Thread(target = input_generate, args=(q,))
+	thread_alert = threading.Thread(target = alert, args=(q,q1,))
+	thread_output = threading.Thread(target = output, args = (q,q1,))
+	thread_input.start()
+	thread_alert.start()
+	thread_output.start()
+	q.join()
+	q1.join()
 
 
 if __name__ == '__main__':
