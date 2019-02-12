@@ -34,16 +34,20 @@ def alertCheck(j_o):
     alert_message=""
     for value in j.values():
         val = value
-    if(val["bloodPressure"]<val["pressureRange"]["lower"]):
+    print(val["pressureRange"]["lower"], val["pressureRange"]["upper"])
+
+    if(int(val["bloodPressure"])<int(val["pressureRange"]["lower"])):
         alert_message+="BloodPressure is Too low, "
-    elif(val["bloodPressure"]>val["pressureRange"]["upper"]):
+    elif(int(val["bloodPressure"])>int(val["pressureRange"]["upper"])):
         alert_message="BloodPressure is Too high, "
-    if(val["pulse"]<val["pulseRange"]["lower"]):
+    if(int(val["pulse"])<int(val["pulseRange"]["lower"])):
         alert_message+="Pulse is Too low, "
-    elif(val["pulse"]>val["pulseRange"]["upper"]):
+    elif(int(val["pulse"])>int(val["pulseRange"]["upper"])):
         alert_message+="Pulse is Too high, "
-    if(val["bloodOx"]<val["oxRange"]["lower"]):
+    if(int(val["bloodOx"])<int(val["oxRange"]["lower"])):
         alert_message+="BloodOx is Too low, "
-    elif(val["bloodOx"]>val["oxRange"]["upper"]):
+    elif(int(val["bloodOx"])>int(val["oxRange"]["upper"])):
         alert_message+="BloodOx is Too high, "
+    if alert_message=="":
+        alert_message = "No Alert Message"
     return sendToUI(alert_message, val)

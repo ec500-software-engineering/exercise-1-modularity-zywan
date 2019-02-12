@@ -1,6 +1,3 @@
-'''
-Copied from https://github.com/ec500-software-engineering/exercise-1-modularity-qzhizhou
-'''
 import json
 import os
 

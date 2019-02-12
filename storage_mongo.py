@@ -26,12 +26,10 @@ class storage:
 		'''
 		patient_data = json.loads(patient_json)
 		sensor_data = json.loads(sensor_json)
-		for key in patient_data.keys():
-			patientId = key
 
 		patient_dict = {}
-		patient_dict['patientId'] = patientId
-		for key, value in patient_data[patientId].items():
+		patientId = patient_data["patientId"]
+		for key, value in patient_data.items():
 			patient_dict[key] = value
 		for key, value in sensor_data[patientId].items():
 			patient_dict[key] = value
@@ -86,9 +84,9 @@ class storage:
 
 		return data
 
-	
-
-
-
-
-
+def main():
+	drop = storage()
+	drop.connectMongob()
+	drop.mycol.drop()
+if __name__ == '__main__':
+	main()
