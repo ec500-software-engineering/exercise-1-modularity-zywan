@@ -34,7 +34,6 @@ def alertCheck(j_o):
     alert_message=""
     for value in j.values():
         val = value
-    print(val["pressureRange"]["lower"], val["pressureRange"]["upper"])
 
     if(int(val["bloodPressure"])<int(val["pressureRange"]["lower"])):
         alert_message+="BloodPressure is Too low, "
