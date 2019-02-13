@@ -56,6 +56,7 @@ def output(q,q1):
 		patient = output_api.patient()
 		patient.recieveFromAlert(alert_json)
 		patient.send_alert_to_UI(db.read_mongo_patient("001"))
+		print("\n")
 		evt.set()
 		q1.task_done()
 
