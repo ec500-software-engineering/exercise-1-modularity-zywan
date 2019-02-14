@@ -29,8 +29,6 @@ def input_generate(q):
 		# push the event into queue
 		q.put((sensor_json, evt))
 		print("wait for the data to be process")
-		# wait
-		evt.wait()
 
 def alert(q,q1):
 	while True:
@@ -39,13 +37,10 @@ def alert(q,q1):
 		# alert
 		print("process the data to get the alert json")
 		alert_json = alert_system.alertCheck(sensor_json)
-		evt.set()
-		q.task_done()
-
 		evt = threading.Event()
 		q1.put((alert_json,evt))
 		print("wait for output")
-		evt.wait()
+
 
 
 def output(q,q1):
@@ -57,8 +52,6 @@ def output(q,q1):
 		patient.recieveFromAlert(alert_json)
 		patient.send_alert_to_UI(db.read_mongo_patient("001"))
 		print("\n")
-		evt.set()
-		q1.task_done()
 
 def main():
 	q = Queue()
