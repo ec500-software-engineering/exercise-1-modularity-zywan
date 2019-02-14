@@ -6,3 +6,4 @@ Output module: ZhiZhou Qiu
 Storage module: Zhangyu Wan(me)     
 ## Instruction     
 Make sure mongodb is running and then run main.py
+## Multithreading Achitecture
