@@ -6,8 +6,8 @@ import json
 import random
 import time
 def generate():
-	gender_list = ['Male', 'Female']
-	name_list = ['a', 'b', 'c', 'd', 'e']
+	# gender_list = ['Male', 'Female']
+	# name_list = ['a', 'b', 'c', 'd', 'e']
 	# generate random patient information
 	patient_dict = {
 		# "patiendId": str(random.randint(1, 100)),

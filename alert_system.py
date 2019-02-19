@@ -1,3 +1,4 @@
+import json
 '''
 Create on 02/10/2019
 @author: Zhangyu Wan
@@ -20,7 +21,7 @@ Created on Wed Feb  6 09:29:32 2019
 
 @author: mohitbeniwal
 """
-import json
+
 
 
 def sendToUI(msg,j):

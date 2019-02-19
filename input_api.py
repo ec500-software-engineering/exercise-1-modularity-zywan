@@ -54,7 +54,7 @@ def readSensorData():
 					'pressureRange': {'lower':pressureRangeLower, 'upper':pressureRangeUpper},
 					'bloodOx': bloodOx,
 					'oxRange': {'lower':oxRangeLower, 'upper':oxRangeUpper},
-					'time': row[10]}
+					'time': time}
 					json_string = json.dumps(sensordata)
 					return json_string
 

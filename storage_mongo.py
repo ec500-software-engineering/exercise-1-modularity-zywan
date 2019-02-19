@@ -33,7 +33,7 @@ class storage:
 			patient_dict[key] = value
 		for key, value in sensor_data[patientId].items():
 			patient_dict[key] = value
-		insert = self.mycol.insert_one(patient_dict)
+		self.mycol.insert_one(patient_dict)
 
 	def delete_mongo_patient(self, patientID):
 		'''
